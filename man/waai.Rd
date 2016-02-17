@@ -2,20 +2,20 @@
 % Please edit documentation in R/waai_caai.R
 \name{waai}
 \alias{waai}
-\title{Compute whole arm abberation index (waai) for a chromosome arm}
+\title{Compute whole-arm abberation index (waai) for a chromosome arm}
 \usage{
 waai(seg_values, seg_nprobes)
 }
 \arguments{
-\item{seg_values}{Numeric vector, with values associated with segments from one chromosome arm (usually mean log ratio)}
+\item{seg_values}{Numeric vector, with values associated with segments from one chromosome arm (usually mean log ratio).}
 
-\item{seg_nprobes}{Numeric vector, with number of probes in each segment}
+\item{seg_nprobes}{Numeric vector, with number of probes in each segment.}
 }
 \value{
-Whole arm abberation index for the given chromosome arm
+Whole-arm abberation index for the given chromosome arm.
 }
 \description{
-Compute whole arm abberation index (waai) for a chromosome arm
+Compute whole-arm abberation index (waai) for a chromosome arm
 }
 \examples{
 # Read aCGH data to data.frame dat
