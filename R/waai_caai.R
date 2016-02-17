@@ -45,7 +45,7 @@ caai <- function(seg_values, seg_start, seg_end, alpha = 10000/0.005, thetaH = 1
   Q <- tanh( abs( H2 - H1 ) / thetaH )
   W <- 0.5*(1 + tanh( 10*(P - 0.5) / tanh(5) ) )
   S <- W*pmin(P, Q)
-  sum_n <- findInterval(seg_start+R, seg_start)[1:(n-1)] - 1:(n-1) +1
+  sum_n <- findInterval(seg_start+R, seg_start)[2:n] - 2:(n) +1
   SR <- zoo::rollapply(S, sum_n, sum, align = "left", fill = NA)
   return(max(SR, na.rm = T))
 }
