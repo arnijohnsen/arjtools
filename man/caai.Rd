@@ -2,29 +2,30 @@
 % Please edit documentation in R/waai_caai.R
 \name{caai}
 \alias{caai}
-\title{Compute complex arm-wise aberration index (caai) for a chromosome arm}
+\title{Complex arm-wise aberration index (CAAI)}
 \usage{
 caai(seg_values, seg_start, seg_end, alpha = 10000/0.005, thetaH = 1.2,
   R = 2e+07)
 }
 \arguments{
-\item{seg_values}{Numeric vector, with values associated with segments from one chromosome arm (usually mean log ratio).}
+\item{seg_values}{Numeric vector, with mean (or other measure) of log ratio for each segment on chromosome arm.}
 
 \item{seg_start}{Numeric vector, with genomic position of segment start.}
 
 \item{seg_end}{Numeric vector, with genomic position of segment end.}
 
-\item{alpha}{A number, alpha value for computation of P. Defaults to the value used by Russnes et al (2010).}
+\item{alpha}{A number, alpha value for computation of P. Defaults to the value used by Russnes et al.}
 
-\item{thetaH}{A number, theta value for compuation of Q. Defaults to the value used by Russnes et al (2010).}
+\item{thetaH}{A number, theta value for compuation of Q. Defaults to the value used by Russnes et al.}
 
-\item{R}{A number, size of window R over which to sum S. Defaults to the value used by Russnes et al (2010).}
+\item{R}{A number, size of window R over which to sum S. Defaults to the value used by Russnes et al.}
 }
 \value{
 Complex arm-wise aberration index for the given chromosome arm.
 }
 \description{
-Compute complex arm-wise aberration index (caai) for a chromosome arm
+Computes complex arm-wise aberration index (CAAI) for a chromosome arm. CAAI is an indicator of complex rearrangements.
+  See Russnes et al (DOI: 10.1126/scitranslmed.3000611) for a detailed definition.
 }
 \examples{
 # Read aCGH data to data.frame dat

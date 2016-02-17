@@ -1,6 +1,9 @@
-#' Compute whole-arm abberation index (waai) for a chromosome arm
+#' Whole-arm aberration index (WAAI)
 #'
-#' @param seg_values Numeric vector, with values associated with segments from one chromosome arm (usually mean log ratio).
+#' Computes whole-arm aberration index (WAAI) for a chromosome arm. WAAI is an indicator of whole-arm gains and losses.
+#'   See Russnes et al (DOI: 10.1126/scitranslmed.3000611) for a detailed definition.
+#'
+#' @param seg_values Numeric vector, with mean (or other measure) of log ratio for each segment on chromosome arm.
 #' @param seg_nprobes Numeric vector, with number of probes in each segment.
 #' @return Whole-arm abberation index for the given chromosome arm.
 #' @examples
@@ -13,14 +16,17 @@ waai <- function(seg_values, seg_nprobes){
   return(weighted.mean(seg_values, seg_nprobes, na.rm = T))
 }
 
-#' Compute complex arm-wise aberration index (caai) for a chromosome arm
+#' Complex arm-wise aberration index (CAAI)
 #'
-#' @param seg_values Numeric vector, with values associated with segments from one chromosome arm (usually mean log ratio).
+#' Computes complex arm-wise aberration index (CAAI) for a chromosome arm. CAAI is an indicator of complex rearrangements.
+#'   See Russnes et al (DOI: 10.1126/scitranslmed.3000611) for a detailed definition.
+#'
+#' @param seg_values Numeric vector, with mean (or other measure) of log ratio for each segment on chromosome arm.
 #' @param seg_start Numeric vector, with genomic position of segment start.
 #' @param seg_end Numeric vector, with genomic position of segment end.
-#' @param alpha A number, alpha value for computation of P. Defaults to the value used by Russnes et al (2010).
-#' @param thetaH A number, theta value for compuation of Q. Defaults to the value used by Russnes et al (2010).
-#' @param R A number, size of window R over which to sum S. Defaults to the value used by Russnes et al (2010).
+#' @param alpha A number, alpha value for computation of P. Defaults to the value used by Russnes et al.
+#' @param thetaH A number, theta value for compuation of Q. Defaults to the value used by Russnes et al.
+#' @param R A number, size of window R over which to sum S. Defaults to the value used by Russnes et al.
 #' @return Complex arm-wise aberration index for the given chromosome arm.
 #' @examples
 #' # Read aCGH data to data.frame dat
