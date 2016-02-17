@@ -1,0 +1,14 @@
+Package: arjtools
+Title: Collection of tools used in copy number variation analysis
+Version: 0.0.0.9000
+Authors@R: person("Arni", "Johnsen", email = "arni.johnsen@gmail.com", role = c("aut", "cre"))
+Description: This package contains a collecttion of tools which I've developed
+    while working with copy number varion data generated with array CGH (aGCH)
+    methods.
+Depends:
+    R (>= 3.1.2)
+License: GPL-3
+LazyData: true
+RoxygenNote: 5.0.1
+Imports: data.table,
+    zoo
