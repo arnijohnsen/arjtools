@@ -18,7 +18,7 @@ map_to_385k <- function(x, chrom){
   if(!all(chrom == chrom[1])){
     stop("All elements of chrom must be equal")
   }
-  load(hg18_385k_pos)
+  load(system.file("R", "sysdata.rda", package = "arjtools"))
   chr <- chrom[1]
   dt <- copy(hg18_385k_pos[chrom == chr])
   dt[,val := pos]
