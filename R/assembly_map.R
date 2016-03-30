@@ -52,7 +52,7 @@ dt_to_385k <- function(dt, assembly = "hg18"){
   if(!(assembly %in% c("hg17", "hg18"))){
     stop("Assembly must be either hg17 or hg18")
   }
-  if(assmebly == "hg17"){
+  if(assembly == "hg17"){
     load(system.file("data", "hg17_hg18_map.rda", package = "arjtools"))
     dt$chrom <- hg17_hg18_map$hg18chrom
     dt$pos   <- hg17_hg18_map$hg18pos
