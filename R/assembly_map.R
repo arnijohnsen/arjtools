@@ -47,7 +47,7 @@ dt_to_385k <- function(dt){
   if(!identical(names(dt)[1:2],c("chrom", "pos"))){
     stop("First two columns should be called chrom and pos")
   }
-  load(system.file("R", "sysdata.rda", package = "arjtools"))
+  load(system.file("data", "hg18_385k_pos.rda", package = "arjtools"))
   dt[,pos := probe_to_385k(pos, chrom), by = chrom]
   setkey(dt, chrom, pos)
   return(copy(dt[,lapply(.SD, mean, na.rm = T), by = .(chrom, pos)][.(hg18_385k_pos$chrom, hg18_385k_pos$pos)]))
