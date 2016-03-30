@@ -38,14 +38,25 @@ probe_to_385k <- function(x, chrom){
 #'   names "chr1", "chrY", etc.
 #'   The remaining columns are interpreted as samples with the column name denoting
 #'   the sample name.
+#' @param assembly String specifying assembly of input data. Can take values "hg18"
+#'   (default) or "hg17" (in which case, design must match hg17 385k design).
 #' @return data.table with mapped data. First two colums are chrom and pos
 #'   and contain information about the location of input probes. The remaining columns
 #'   are mapped data for each sample.
 #' @import data.table
 #' @export
-dt_to_385k <- function(dt){
+dt_to_385k <- function(dt, assembly = "hg18"){
   if(!identical(names(dt)[1:2],c("chrom", "pos"))){
     stop("First two columns should be called chrom and pos")
+  }
+  if(!(assembly %in% c("hg17", "hg18"))){
+    stop("Assembly must be either hg17 or hg18")
+  }
+  if(assmebly == "hg17"){
+    load(system.file("data", "hg17_hg18_map.rda", package = "arjtools"))
+    dt$chrom <- hg17_hg18_map$hg18chrom
+    dt$pos   <- hg17_hg18_map$hg18pos
+    dt <- dt[!is.na(chrom)]
   }
   load(system.file("data", "hg18_385k_pos.rda", package = "arjtools"))
   dt[,pos := probe_to_385k(pos, chrom), by = chrom]
