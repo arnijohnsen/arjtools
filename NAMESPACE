@@ -2,6 +2,7 @@
 
 export(caai)
 export(dt_to_385k)
+export(kcsmooth)
 export(probe_to_385k)
 export(waai)
 import(data.table)

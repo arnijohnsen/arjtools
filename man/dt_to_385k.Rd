@@ -4,7 +4,7 @@
 \alias{dt_to_385k}
 \title{Converts aCGH data to hg18 385k design}
 \usage{
-dt_to_385k(dt)
+dt_to_385k(dt, assembly = "hg18")
 }
 \arguments{
 \item{dt}{data.table with aCGH data. First two colums should be names chrom and pos
@@ -12,6 +12,9 @@ and contain information about the location of input probes. Chromosomes should b
 names "chr1", "chrY", etc.
 The remaining columns are interpreted as samples with the column name denoting
 the sample name.}
+
+\item{assembly}{String specifying assembly of input data. Can take values "hg18"
+(default) or "hg17" (in which case, design must match hg17 385k design).}
 }
 \value{
 data.table with mapped data. First two colums are chrom and pos
