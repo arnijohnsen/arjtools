@@ -39,3 +39,18 @@
 #' }
 #' @source \url{https://genome.ucsc.edu/cgi-bin/hgLiftOver}
 "hg17_hg18_map"
+
+#' Information about cytobands in 5 most recent assemblies
+#'
+#' List of 5, each list item is a data.table with 5 columns: chromosome,
+#'   cytoband start, cytoband end, cytoband name, and stain value.
+#'   Used by the coord_to_arm function.
+#'
+#' @format List of 5, each list item is a data.table with 5 columns: chromosome,
+#'   cytoband start, cytoband end, cytoband name, and stain value
+#' \describe{
+#'   \item{hg16}{data.table with 5 columns}
+#'   \item{...}{data.table with 5 columns}
+#' }
+#' @source \url{https://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz}
+"cytoband_map"
