@@ -14,5 +14,6 @@ BugReports: http://github.com/arnijohnsen/arjtools/issues
 RoxygenNote: 5.0.1
 Imports: zoo,
     data.table,
-    KCsmart
+    KCsmart,
+    stringr
 Suggests: testthat
