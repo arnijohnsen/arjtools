@@ -13,6 +13,9 @@
 #' seg.dt[,.(waai = waai(mean, n.probes)), by=.(chrom, arm)]
 #' @export
 waai <- function(seg_values, seg_nprobes){
+  if(length(seg_values) == 0){
+    return(0);
+  }
   return(weighted.mean(seg_values, seg_nprobes, na.rm = T))
 }
 
@@ -36,6 +39,9 @@ waai <- function(seg_values, seg_nprobes){
 #' @export
 caai <- function(seg_values, seg_start, seg_end, alpha = 10000/0.005, thetaH = 1.2, R = 20e6){
   n <- length(seg_values)
+  if(n == 0){
+    return(0);
+  }
   seg_lengths <- seg_end - seg_start + 1
   L1 <- seg_lengths[1:(n-1)]
   L2 <- seg_lengths[2:n]
