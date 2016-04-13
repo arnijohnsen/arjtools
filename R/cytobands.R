@@ -10,9 +10,27 @@
 #'   and "hg16" (corresponding to the five latest human genome annotations in the
 #'   UCSC genome browser).
 #' @return Character vector, with choromosome arm of given genomic coordinates
-coord_to_arm <- function(chromosome, position, assembly = "hg19"){
-  if (!(assembly %in% c("hg38", "hg19", "hg18", "hg17", "hg16"))) {
-    stop("Invalid assembly Allowed options are hg38, hg19, hg18, hg17 and hg16")
+coord_to_arm <- function(chromosome, position, assembly = "hg19", full = F){
+  if(length(chromosome) !=  length(position)){
+    stop("chromosome and position must have equal length")
   }
-  return(NULL)
+  if (!(assembly %in% c("hg38", "hg19", "hg18", "hg17", "hg16"))) {
+    stop("Invalid assembly, allowed options are hg38, hg19, hg18, hg17 and hg16")
+  }
+  if(length(chromosome) > 1){
+    return(mapply(coord_to_arm, chromosome, position, assembly, full, USE.NAMES = F))
+  }
+  if(stringr::str_sub(chromosome, 1, 3) != "chr"){
+    chromosome <- str_c("chr", chromosome)
+  }
+  if(!grepl("chr[X-Y]|[0-9]+", chromosome)){
+    stop("Invalid chromosome, must be 1-22, X or Y (or chr1-chr22, chrX or chrY)")
+  }
+  data(cytoband_map)
+  map <- cytoband_map[[assembly]][V1 == chromosome]
+  arm <- map[(findInterval(position, map$V3)+1)]$V4
+  if(!full){
+    arm <- str_sub(arm, 1,1)
+  }
+  return(arm)
 }

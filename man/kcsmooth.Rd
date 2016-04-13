@@ -5,7 +5,7 @@
 \title{Smooth samples with KCsmart algorithm}
 \usage{
 kcsmooth(dt, mirrorLocs, sigma = 1e+06, sampleDensity = 50000,
-  maxmem = 1000, verbose = T, what = "both")
+  maxmem = 1000, verbose = T, what = "both", groups = NULL)
 }
 \arguments{
 \item{dt}{data.table with aCGH data. First two colums should be names chrom and pos
@@ -24,10 +24,17 @@ names "1", "Y", etc.}
 
 \item{what}{character, determines what data should be returned. "pos" for only positive KCscore,
 "neg" for only negative KCscore, "both" for both positive and negative KCscore.}
+
+\item{groups}{Numeric vector. If NULL is passed (default), each sample is smoothed seperately.
+If a numeric vector is passed, it indicates which samples should be grouped together before
+smoothing. For example, groups = c(1,1,2) indicates that the first two samples will be grouped
+before smothing and the third will be smoothed seperately.
+If a non-NULL value is passed, the return data frame will have columns equal to the number of groups passed.
+(This is the same as passing group = c(1,2,3,...)).}
 }
 \value{
 data.table with smoothed values. First column is chromosome, second column indicates if value is from positive
-  or negative smoothed values. All other columns are smoothed values for each sample.
+  or negative smoothed values. All other columns are smoothed values for each sample or group.
 }
 \description{
 Wrapper to smooth aCGH data with algorithm from KCsmart.
