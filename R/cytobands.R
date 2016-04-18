@@ -24,11 +24,10 @@ coord_to_arm <- function(chromosome, position, assembly = "hg19", full = F){
     stop("Invalid chromosome, must be 1-22, X or Y (or chr1-chr22, chrX or chrY)")
   }
   data(cytoband_map)
-  names(position) <- chromosome
-  arms <- rep("", length(chromosome))
+  arms <- rep("     ", length(chromosome))
   for(i in unique(chromosome)){
     map <- cytoband_map[[assembly]][V1 == i]
-    arm <- map[(findInterval(position[i], map$V3)+1)]$V4
+    arm <- map[(findInterval(position[chromosome == i], map$V3)+1)]$V4
     if(!full){
       arm <- stringr::str_sub(arm, 1,1)
     }
