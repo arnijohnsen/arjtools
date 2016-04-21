@@ -2,7 +2,7 @@
 #'
 #' Wrapper to smooth aCGH data with algorithm from KCsmart.
 #'
-#' @param dt data.table with aCGH data. First two colums should be names chrom and pos
+#' @param dat data.table with aCGH data. First two colums should be names chrom and pos
 #'   and contain information about the location of input probes. Chromosomes should be
 #'   names "1", "Y", etc.
 #' @param mirrorLocs List containing the chromosome start, centromere and end positions
@@ -22,41 +22,77 @@
 #'   or negative smoothed values. All other columns are smoothed values for each sample or group.
 #' @import data.table
 #' @export
-kcsmooth <- function(dt, mirrorLocs, sigma = 1e+06, sampleDensity = 50000, maxmem = 1000, verbose = T, what = "both", groups= NULL){
+kcsmooth <- function(dat, mirrorLocs, sigma = 1e+06, sampleDensity = 50000, maxmem = 1000, verbose = T, what = "both", groups = NULL){
   if(!(what %in% c("pos", "neg", "both"))){
     stop("what must be pos, neg or both")
   }
-  n <- dim(dt)[2]
+  if(!(all(names(dat)[1:2] == c("chrom", "maploc")))){
+    setnames(dat, names(dat)[1:2], c("chrom", "maploc"))
+  }
+  if(stringr::str_detect(dat[1]$chrom, "^chr")){
+    dat[,chrom := gsub("chr", "", chrom)]
+  }
+  n <- dim(dat)[2]
   if(is.null(groups)){
     groups <- 1:(n-2)
   }
   n_groups <- length(unique(groups))
-  spm_to_dt <- function(spm, what){
+  spm_to_dat <- function(spm, what){
     spm_unlist <- unlist(spm@data)
-    dt <- data.table(
+    dat <- data.table(
       chrom = stringr::str_replace(names(spm_unlist), "\\..*", ""),
       posneg  = stringr::str_extract(names(spm_unlist), "[a-z]+"),
+      num = stringr::str_extract(names(spm_unlist), "[0-9]+$"),
       value = spm_unlist)
     if(what != "both"){
-      dt <- dt[posneg == what]
+      dat <- dat[posneg == what]
     }
-    return(dt)
+    return(dat)
   }
   # Smooth first group
-  spm <- KCsmart::calcSpm(dt[,c(1:2, which(groups == 1)+2), with = F], hsMirrorLocs, sigma, sampleDensity, verbose)
-  all_dt <- spm_to_dt(spm, what)
+  spm <- KCsmart::calcSpm(dat[,c(1:2, which(groups == 1)+2), with = F], hsMirrorLocs, sigma, sampleDensity, verbose)
+  all_dat <- spm_to_dat(spm, what)
   # Smooth groups 2, 3, ...
   if (n_groups > 1){
     for(i in 2:n_groups){
-      spm <- KCsmart::calcSpm(dt[,c(1:2, which(groups == i)+2), with = F], hsMirrorLocs, sigma, sampleDensity, verbose)
-      all_dt[,paste("col", i, sep = ""):=spm_to_dt(spm, what)$value]
+      spm <- KCsmart::calcSpm(dat[,c(1:2, which(groups == i)+2), with = F], hsMirrorLocs, sigma, sampleDensity, verbose)
+      all_dat[,paste("col", i, sep = ""):=spm_to_dat(spm, what)$value]
     }
   }
-
   if(identical(groups, 1:(n-2))){
-    setnames(all_dt, c("chrom", "what", names(dt)[3:n]))
+    setnames(all_dat, c("chrom", "what", "num", names(dat)[3:n]))
   } else {
-    setnames(all_dt, c("chrom", "what", paste("group", 1:n_groups, sep = "")))
+    setnames(all_dat, c("chrom", "what", "num", paste("group", 1:n_groups, sep = "")))
   }
-  return(all_dt)
+  return(all_dat)
+}
+
+#' Create index from sig_region object
+#'
+#' Function to extract information from a sig_region object, to a list of all kcprobes within
+#' those regions
+#'
+#' @param sig_regions A sig_regions object from kcsmart
+#' @return data.table with 4 columns: number of gain/loss, chrom(osome) of region, whether its a gain or loss (pos/neg)
+#'   and the num(ber) of kcprobe (genomic location of kcprobes is just sampleDensity*(number-1))
+#' @import data.table
+#' @export
+kcmakefilter <- function(sig_regions){
+  dat_list <- list()
+  n_pos <- length(sig_regions@gains)
+  for(i in 1:n_pos){
+    dat_list[[i]] <- data.table(region = i,
+                                chrom = sig_regions@gains[[i]]$chromosome,
+                                what  = "pos",
+                                num   = sig_regions@gains[[i]]$x)
+  }
+  n_neg <- length(sig_regions@losses)
+  for(i in 1:n_neg){
+    dat_list[[i+n_pos]] <- data.table(region = i,
+                                chrom = sig_regions@losses[[i]]$chromosome,
+                                what  = "neg",
+                                num   = sig_regions@losses[[i]]$x)
+  }
+  dat <- rbindlist(dat_list)
+  return(dat)
 }

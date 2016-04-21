@@ -4,11 +4,11 @@
 \alias{kcsmooth}
 \title{Smooth samples with KCsmart algorithm}
 \usage{
-kcsmooth(dt, mirrorLocs, sigma = 1e+06, sampleDensity = 50000,
+kcsmooth(dat, mirrorLocs, sigma = 1e+06, sampleDensity = 50000,
   maxmem = 1000, verbose = T, what = "both", groups = NULL)
 }
 \arguments{
-\item{dt}{data.table with aCGH data. First two colums should be names chrom and pos
+\item{dat}{data.table with aCGH data. First two colums should be names chrom and pos
 and contain information about the location of input probes. Chromosomes should be
 names "1", "Y", etc.}
 
