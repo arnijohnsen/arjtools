@@ -94,5 +94,6 @@ kcmakefilter <- function(sig_regions){
                                 num   = sig_regions@losses[[i]]$x)
   }
   dat <- rbindlist(dat_list)
+  dat$num <- as.numeric(dat$num)
   return(dat)
 }
